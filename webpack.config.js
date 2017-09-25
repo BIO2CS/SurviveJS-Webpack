@@ -5,6 +5,8 @@ const NpmInstallPlugin = require("npm-install-webpack-plugin");
 
 const TARGET = process.env.npm_lifecycle_event;
 
+process.env.BABEL_ENV = TARGET;
+
 const PATHS = {
   app: path.join(__dirname, "app"),
   build: path.join(__dirname, "build")
@@ -22,10 +24,18 @@ const common = {
     loaders: [
       {
         test: /\.css$/,
-        loader: ["style-loader", "css-loader"],
+        loaders: ["style-loader", "css-loader"],
+        include: PATHS.app
+      },
+      {
+        test: /\.jsx?$/,
+        loaders: ["babel-loader?cacheDirectory"],
         include: PATHS.app
       }
     ]
+  },
+  resolve: {
+    extensions: [".js", ".jsx"]
   }
 };
 
